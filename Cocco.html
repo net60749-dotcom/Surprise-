@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Coco Memory Matching Game</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap');
+  
+  body {
+    margin: 0; padding: 0;
+    background: linear-gradient(135deg, #f9c784, #e06a4f);
+    font-family: 'Montserrat', sans-serif;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+  }
+
+  h1 {
+    margin: 20px 0 10px 0;
+    color: #fff8dc;
+    text-shadow: 2px 2px #5b2c06;
+    font-size: 3rem;
+  }
+
+  #game {
+    display: grid;
+    grid-template-columns: repeat(4, 110px);
+    grid-gap: 15px;
+    margin: 20px auto;
+    perspective: 1000px;
+  }
+
+  .card {
+    width: 110px; height: 150px;
+    border-radius: 15px;
+    cursor: pointer;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.6s;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+  }
+
+  .card.flipped {
+    transform: rotateY(180deg);
+    cursor: default;
+  }
+
+  .front, .back {
+    position: absolute;
+    width: 100%; height: 100%;
+    border-radius: 15px;
+    backface-visibility: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 4rem;
+  }
+
+  .front {
+    background: #ffb347; /* marigold orange */
+    box-shadow: inset 0 0 10px #ffefba;
+    color: #5b2c06;
+    text-shadow: 1px 1px #fff;
+  }
+
+  .back {
+    background: #262626;
+    color: #fff;
+    transform: rotateY(180deg);
+  }
+
+  .matched {
+    box-shadow: 0 0 20px 5px #ffda00;
+    cursor: default;
+  }
+
+  #message {
+    margin-top: 15px;
+    color: #fff8dc;
+    font-size: 1.4rem;
+    text-shadow: 1px 1px #5b2c06;
+    min-height: 2rem;
+  }
+
+  #restartBtn {
+    margin: 15px;
+    background-color: #ff6f61;
+    border: none;
+    color: #fff8dc;
+    padding: 12px 25px;
+    font-size: 1.1rem;
+    border-radius: 30px;
+    cursor: pointer;
+    box-shadow: 0 6px 15px rgba(255,111,97,0.7);
+    transition: background-color 0.3s ease;
+  }
+
+  #restartBtn:hover {
+    background-color: #ff4b3e;
+  }
+
+  /* Petal animation in background */
+  .petal {
+    position: fixed;
+    width: 20px;
+    height: 20px;
+    background: radial-gradient(circle at center, #ffb347 0%, #e06a4f 100%);
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+    opacity: 0.7;
+    animation-name: fall;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+  }
+  @keyframes fall {
+    0% {transform: translateY(-30px) rotate(0deg);}
+    100% {transform: translateY(110vh) rotate(360deg);}
+  }
+</style>
+</head>
+<body>
+
+<h1>Coco Memory Matching Game</h1>
+<div id="game"></div>
+<div id="message"></div>
+<button id="restartBtn">Restart Game</button>
+
+<audio id="bgMusic" loop>
+  <source src="https://cdn.pixabay.com/download/audio/2022/03/14/audio_7ad2765f39.mp3?filename=mexican-guitar-8215.mp3" type="audio/mpeg">
+  Your browser does not support the audio element.
+</audio>
+<button id="musicToggle" style="background:#ff6f61;color:#fff8dc;border:none;padding:8px 15px; border-radius:20px;cursor:pointer; margin-bottom:10px;">🔊 Music On</button>
+
+<script>
+  // Background Petal Animation
+  function createPetal() {
+    const petal = document.createElement('div');
+    petal.classList.add('petal');
+    petal.style.left = Math.random() * window.innerWidth + 'px';
+    petal.style.animationDuration = (5 + Math.random() * 7) + 's';
+    petal.style.animationDelay = Math.random() * 10 + 's';
+    petal.style.width = petal.style.height = (15 + Math.random() * 10) + 'px';
+    document.body.appendChild(petal);
+
+    setTimeout(() => {
+      petal.remove();
+    }, 12000);
+  }
+
+  setInterval(createPetal, 500);
+
+  // Game logic
+  const symbols = ['💀','🎸','🎺','🎤','🌺','🎻','🪕','🦜'];
+  let cardsArray = [...symbols, ...symbols];
+  let gameContainer = document.getElementById('game');
+  let message = document.getElementById('message');
+  let restartBtn = document.getElementById('restartBtn');
+
+  let firstCard = null;
+  let secondCard = null;
+  let lockBoard = false;
+  let matches = 0;
+
+  function shuffle(array) {
+    for(let i = array.length -1; i > 0; i--) {
+      let j = Math.floor(Math.random() * (i+1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+  }
+
+  function createCard(symbol, index) {
+    const card = document.createElement('div');
+    card.classList.add('card');
+    card.dataset.symbol = symbol;
+    card.dataset.index = index;
+
+    const front = document.createElement('div');
+    front.classList.add('front');
+    front.textContent = '❓';
+
+    const back = document.createElement('div');
+    back.classList.add('back');
+    back.textContent = symbol;
+
+    card.appendChild(front);
+    card.appendChild(back);
+
+    card.addEventListener('click', flipCard);
+
+    return card;
+  }
+
+  function flipCard(e) {
+    if(lockBoard) return;
+    const card = e.currentTarget;
+    if(card === firstCard) return;
+    if(card.classList.contains('matched')) return;
+
+    card.classList.add('flipped');
+
+    if(!firstCard) {
+      firstCard = card;
+      return;
+    }
+
+    secondCard = card;
+    checkMatch();
+  }
+
+  function checkMatch() {
+    const isMatch = firstCard.dataset.symbol === secondCard.dataset.symbol;
+    if(isMatch) {
+      firstCard.classList.add('matched');
+      secondCard.classList.add('matched');
+      matches++;
+      playSound('correct');
+      resetTurn();
+
+      if(matches === symbols.length) {
+        message.textContent = '🎉 ¡Felicidades! You matched all pairs!';
+        playSound('win');
+      }
+    } else {
+      playSound('wrong');
+      lockBoard = true;
+      setTimeout(() => {
+        firstCard.classList.remove('flipped');
+        secondCard.classList.remove('flipped');
+        resetTurn();
+      }, 1200);
+    }
+  }
+
+  function resetTurn() {
+    [firstCard, secondCard] = [null, null];
+    lockBoard = false;
+  }
+
+  function startGame() {
+    matches = 0;
+    message.textContent = '';
+    gameContainer.innerHTML = '';
+    lockBoard = false;
+    [firstCard, secondCard] = [null, null];
+
+    shuffle(cardsArray);
+
+    cardsArray.forEach((symbol, index) => {
+      const card = createCard(symbol, index);
+      gameContainer.appendChild(card);
+    });
+  }
+
+  // Sound effects
+  const sounds = {
+    correct: new Audio('https://cdn.pixabay.com/download/audio/2022/03/18/audio_56ed3d647e.mp3?filename=positive-ting-5693.mp3'),
+    wrong: new Audio('https://cdn.pixabay.com/download/audio/2022/03/20/audio_084fb09181.mp3?filename=negative-beep-6059.mp3'),
+    win: new Audio('https://cdn.pixabay.com/download/audio/2021/12/15/audio_56dd67574d.mp3?filename=game-win-6443.mp3')
+  };
+
+  function playSound(name) {
+    if (sounds[name]) {
+      sounds[name].currentTime = 0;
+      sounds[name].play();
+    }
+  }
+
+  restartBtn.addEventListener('click', startGame);
+
+  // Background music control
+  const bgMusic = document.getElementById('bgMusic');
+  const musicToggle = document.getElementById('musicToggle');
+  let musicPlaying = false;
+
+  musicToggle.addEventListener('click', () => {
+    if(musicPlaying){
+      bgMusic.pause();
+      musicToggle.textContent = '🔈 Music Off';
+    } else {
+      bgMusic.play();
+      musicToggle.textContent = '🔊 Music On';
+    }
+    musicPlaying = !musicPlaying;
+  });
+
+  startGame();
+</script>
+
+</body>
+  </html>
