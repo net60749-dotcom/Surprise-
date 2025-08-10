@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>MCAT Chemistry MCQs 1-20</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    background: #f7f9fc;
+    color: #222;
+  }
+  h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #003366;
+  }
+  #search {
+    display: block;
+    margin: 0 auto 30px auto;
+    padding: 12px 20px;
+    width: 90%;
+    max-width: 600px;
+    font-size: 16px;
+    border-radius: 25px;
+    border: 2px solid #004080;
+    outline: none;
+    transition: 0.3s border-color ease-in-out;
+  }
+  #search:focus {
+    border-color: #007bff;
+  }
+  .mcq {
+    background: white;
+    border-radius: 10px;
+    padding: 18px 25px;
+    margin-bottom: 20px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  }
+  .question {
+    font-weight: 700;
+    font-size: 18px;
+    margin-bottom: 12px;
+    color: #004080;
+  }
+  .options button {
+    display: block;
+    width: 100%;
+    max-width: 580px;
+    margin: 7px 0;
+    padding: 12px 18px;
+    font-size: 16px;
+    border: 2px solid #004080;
+    background: white;
+    border-radius: 8px;
+    cursor: pointer;
+    text-align: left;
+    transition: background-color 0.3s, border-color 0.3s;
+  }
+  .options button:hover {
+    background-color: #e6f0ff;
+  }
+  .options button.correct {
+    background-color: #d4edda !important;
+    border-color: #28a745 !important;
+    color: #155724;
+    font-weight: 700;
+  }
+  .options button.wrong {
+    background-color: #f8d7da !important;
+    border-color: #dc3545 !important;
+    color: #721c24;
+    font-weight: 700;
+  }
+  .explanation {
+    margin-top: 12px;
+    padding: 12px 18px;
+    background-color: #f1f8ff;
+    border-left: 5px solid #004080;
+    border-radius: 6px;
+    font-size: 15px;
+    color: #003366;
+    display: none;
+  }
+</style>
+</head>
+<body>
+
+<h1>MCAT Chemistry MCQs 1–20</h1>
+
+<input type="text" id="search" placeholder="Search questions..." />
+
+<div id="mcq-container">
+
+<!-- Q1 -->
+<div class="mcq" data-question="oxidation chromium dichromate">
+  <div class="question">Q1: What is the oxidation state of chromium in <code>Cr<sub>2</sub>O<sub>7</sub><sup>2-</sup></code>?</div>
+  <div class="options">
+    <button data-correct="false">A) +3</button>
+    <button data-correct="true">B) +6</button>
+    <button data-correct="false">C) +7</button>
+    <button data-correct="false">D) +4</button>
+  </div>
+  <div class="explanation">Explanation: Chromium is +6 in dichromate ion.</div>
+</div>
+
+<!-- Q2 -->
+<div class="mcq" data-question="avogadro number">
+  <div class="question">Q2: What is Avogadro’s number?</div>
+  <div class="options">
+    <button data-correct="false">A) 6.022 × 10<sup>20</sup></button>
+    <button data-correct="true">B) 6.022 × 10<sup>23</sup></button>
+    <button data-correct="false">C) 3.0 × 10<sup>8</sup></button>
+    <button data-correct="false">D) 1.6 × 10<sup>-19</sup></button>
+  </div>
+  <div class="explanation">Avogadro's number is approximately 6.022 × 10²³ particles per mole.</div>
+</div>
+
+<!-- Q3 -->
+<div class="mcq" data-question="ideal gas constant">
+  <div class="question">Q3: In the ideal gas equation <code>PV = nRT</code>, what does 'R' stand for?</div>
+  <div class="options">
+    <button data-correct="true">A) Universal gas constant</button>
+    <button data-correct="false">B) Rate of reaction</button>
+    <button data-correct="false">C) Resistance</button>
+    <button data-correct="false">D) Radius</button>
+  </div>
+  <div class="explanation">R is the universal gas constant (8.314 J/mol·K).</div>
+</div>
+
+<!-- Q4 -->
+<div class="mcq" data-question="exothermic reaction">
+  <div class="question">Q4: Which best describes an exothermic reaction?</div>
+  <div class="options">
+    <button data-correct="true">A) Releases heat to surroundings</button>
+    <button data-correct="false">B) Absorbs heat from surroundings</button>
+    <button data-correct="false">C) Has zero enthalpy change</button>
+    <button data-correct="false">D) Is always non-spontaneous</button>
+  </div>
+  <div class="explanation">Exothermic reactions release heat, lowering system enthalpy.</div>
+</div>
+
+<!-- Q5 -->
+<div class="mcq" data-question="subatomic particle charge">
+  <div class="question">Q5: Which subatomic particle has a positive charge?</div>
+  <div class="options">
+    <button data-correct="true">A) Proton</button>
+    <button data-correct="false">B) Neutron</button>
+    <button data-correct="false">C) Electron</button>
+    <button data-correct="false">D) Positron</button>
+  </div>
+  <div class="explanation">Protons have positive charge; electrons negative; neutrons neutral.</div>
+</div>
+
+<!-- Q6 -->
+<div class="mcq" data-question="periodic table group valence electrons">
+  <div class="question">Q6: Elements in the same group have the same:</div>
+  <div class="options">
+    <button data-correct="true">A) Number of valence electrons</button>
+    <button data-correct="false">B) Atomic number</button>
+    <button data-correct="false">C) Number of neutrons</button>
+    <button data-correct="false">D) Atomic mass</button>
+  </div>
+  <div class="explanation">Group elements share valence electron count, causing similar chemical properties.</div>
+</div>
+
+<!-- Q7 -->
+<div class="mcq" data-question="ionic bond electron transfer">
+  <div class="question">Q7: Which bond is formed by transfer of electrons?</div>
+  <div class="options">
+    <button data-correct="false">A) Covalent bond</button>
+    <button data-correct="true">B) Ionic bond</button>
+    <button data-correct="false">C) Metallic bond</button>
+    <button data-correct="false">D) Hydrogen bond</button>
+  </div>
+  <div class="explanation">Ionic bonds form by electron transfer between atoms.</div>
+</div>
+
+<!-- Q8 -->
+<div class="mcq" data-question="pH acidic basic">
+  <div class="question">Q8: What is the pH of a strongly acidic solution?</div>
+  <div class="options">
+    <button data-correct="true">A) Less than 7</button>
+    <button data-correct="false">B) Equal to 7</button>
+    <button data-correct="false">C) Greater than 7</button>
+    <button data-correct="false">D) Equal to 14</button>
+  </div>
+  <div class="explanation">Acids have pH &lt; 7; bases &gt; 7; neutral = 7.</div>
+</div>
+
+<!-- Q9 -->
+<div class="mcq" data-question="molar mass oxygen">
+  <div class="question">Q9: What is the molar mass of oxygen gas (<code>O<sub>2</sub></code>)?</div>
+  <div class="options">
+    <button data-correct="false">A) 8 g/mol</button>
+    <button data-correct="true">B) 32 g/mol</button>
+    <button data-correct="false">C) 16 g/mol</button>
+    <button data-correct="false">D) 64 g/mol</button>
+  </div>
+  <div class="explanation"><code>O<sub>2</sub></code> molar mass = 2 × 16 = 32 g/mol.</div>
+</div>
+
+<!-- Q10 -->
+<div class="mcq" data-question="reaction rate factors">
+  <div class="question">Q10: Which factor does NOT affect reaction rate?</div>
+  <div class="options">
+    <button data-correct="true">A) Color of reactants</button>
+    <button data-correct="false">B) Temperature</button>
+    <button data-correct="false">C) Concentration</button>
+    <button data-correct="false">D) Surface area</button>
+  </div>
+  <div class="explanation">Color does not affect rate; others do.</div>
+</div>
+
+<!-- Q11 -->
+<div class="mcq" data-question="lewis structure">
+  <div class="question">Q11: What does a Lewis structure represent?</div>
+  <div class="options">
+    <button data-correct="true">A) Arrangement of valence electrons</button>
+    <button data-correct="false">B) Atomic nuclei positions</button>
+    <button data-correct="false">C) Molecular vibrations</button>
+    <button data-correct="false">D) Nuclear reactions</button>
+  </div>
+  <div class="explanation">Lewis structures show valence electrons and bonds.</div>
+</div>
+
+<!-- Q12 -->
+<div class="mcq" data-question="catalyst role">
+  <div class="question">Q12: Role of a catalyst in a reaction?</div>
+  <div class="options">
+    <button data-correct="true">A) Speeds reaction without being consumed</button>
+    <button data-correct="false">B) Slows reaction</button>
+    <button data-correct="false">C) Changes products</button>
+    <button data-correct="false">D) Increases temperature</button>
+  </div>
+  <div class="explanation">Catalysts lower activation energy, speeding up reactions.</div>
+</div>
+
+<!-- Q13 -->
+<div class="mcq" data-question="enthalpy change negative">
+  <div class="question">Q13: Negative ΔH indicates?</div>
+  <div class="options">
+    <button data-correct="true">A) Exothermic reaction</button>
+    <button data-correct="false">B) Endothermic reaction</button>
+    <button data-correct="false">C) No energy change</button>
+    <button data-correct="false">D) Unstable products</button>
+  </div>
+  <div class="explanation">Negative ΔH means heat is released (exothermic).</div>
+</div>
+
+<!-- Q14 -->
+<div class="mcq" data-question="atomic radius trend">
+  <div class="question">Q14: Atomic radius trend across a period?</div>
+  <div class="options">
+    <button data-correct="true">A) Decreases</button>
+    <button data-correct="false">B) Increases</button>
+    <button data-correct="false">C) Remains constant</button>
+    <button data-correct="false">D) Fluctuates randomly</button>
+  </div>
+  <div class="explanation">Radius decreases left to right due to increasing nuclear charge.</div>
+</div>
+
+<!-- Q15 -->
+<div class="mcq" data-question="isotopes">
+  <div class="question">Q15: Isotopes differ in:</div>
+  <div class="options">
+    <button data-correct="true">A) Number of neutrons</button>
+    <button data-correct="false">B) Number of protons</button>
+    <button data-correct="false">C) Atomic number</button>
+    <button data-correct="false">D) Chemical properties</button>
+  </div>
+  <div class="explanation">Isotopes have same protons but different neutrons.</div>
+</div>
+
+<!-- Q16 -->
+<div class="mcq" data-question="electronegativity trend">
+  <div class="question">Q16: Electronegativity trend across period?</div>
+  <div class="options">
+    <button data-correct="true">A) Increases</button>
+    <button data-correct="false">B) Decreases</button>
+    <button data-correct="false">C) Remains same</button>
+    <button data-correct="false">D) Varies randomly</button>
+  </div>
+  <div class="explanation">Electronegativity increases across a period.</div>
+</div>
+
+<!-- Q17 -->
+<div class="mcq" data-question="neutralization products">
+  <div class="question">Q17: Products of neutralization?</div>
+  <div class="options">
+    <button data-correct="true">A) Salt and water</button>
+    <button data-correct="false">B) Acid and base</button>
+    <button data-correct="false">C) Gas and water</button>
+    <button data-correct="false">D) Salt and acid</button>
+  </div>
+  <div class="explanation">Neutralization produces salt and water.</div>
+</div>
+
+<!-- Q18 -->
+<div class="mcq" data-question="boiling point water">
+  <div class="question">Q18: Which force causes water’s high boiling point?</div>
+  <div class="options">
+    <button data-correct="true">A) Hydrogen bonding</button>
+    <button data-correct="false">B) Van der Waals forces</button>
+    <button data-correct="false">C) Dipole-dipole interactions</button>
+    <button data-correct="false">D) Ionic bonding</button>
+  </div>
+  <div class="explanation">Hydrogen bonding raises water’s boiling point.</div>
+</div>
+
+<!-- Q19 -->
+<div class="mcq" data-question="oxidation in redox">
+  <div class="question">Q19: Oxidation means:</div>
+  <div class="options">
+    <button data-correct="true">A) Loss of electrons</button>
+    <button data-correct="false">B) Gain of electrons</button>
+    <button data-correct="false">C) Gain of protons</button>
+    <button data-correct="false">D) Loss of neutrons</button>
+  </div>
+  <div class="explanation">Oxidation is loss of electrons.</div>
+</div>
+
+<!-- Q20 -->
+<div class="mcq" data-question="sublimation">
+  <div class="question">Q20: Sublimation is:</div>
+  <div class="options">
+    <button data-correct="true">A) Solid directly to gas</button>
+    <button data-correct="false">B) Gas to liquid</button>
+    <button data-correct="false">C) Liquid to solid</button>
+    <button data-correct="false">D) Solid to liquid</button>
+  </div>
+  <div class="explanation">Sublimation is solid directly changing to gas.</div>
+</div>
+
+</div>
+
+<script>
+  const mcqContainer = document.getElementById('mcq-container');
+  const searchInput = document.getElementById('search');
+
+  searchInput.addEventListener('input', () => {
+    const query = searchInput.value.toLowerCase();
+    const mcqs = mcqContainer.querySelectorAll('.mcq');
+    mcqs.forEach(mcq => {
+      const text = mcq.dataset.question.toLowerCase() + mcq.querySelector('.question').textContent.toLowerCase();
+      mcq.style.display = text.includes(query) ? 'block' : 'none';
+    });
+  });
+
+  mcqContainer.addEventListener('click', e => {
+    if (e.target.tagName === 'BUTTON') {
+      const btn = e.target;
+      const mcq = btn.closest('.mcq');
+      const buttons = mcq.querySelectorAll('.options button');
+      if (btn.classList.contains('correct') || btn.classList.contains('wrong')) {
+        return; // prevent multiple attempts on same question
+      }
+      buttons.forEach(b => {
+        b.disabled = true;
+        if (b.dataset.correct === 'true') {
+          b.classList.add('correct');
+        }
+      });
+      if (btn.dataset.correct === 'true') {
+        btn.classList.add('correct');
+      } else {
+        btn.classList.add('wrong');
+      }
+      const explanation = mcq.querySelector('.explanation');
+      explanation.style.display = 'block';
+    }
+  });
+</script>
+
+</body>
+  </html>
