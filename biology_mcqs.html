@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Biology MCQs Interactive</title>
+<style>
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f7f9fc;
+    max-width: 900px;
+    margin: 30px auto;
+    padding: 20px;
+    color: #222;
+  }
+  h1 {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+  #search {
+    width: 100%;
+    padding: 10px;
+    font-size: 1rem;
+    margin-bottom: 25px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+  }
+  .mcq {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 0 12px rgba(0,0,0,0.1);
+    padding: 20px;
+    margin-bottom: 25px;
+  }
+  .question {
+    font-weight: bold;
+    margin-bottom: 15px;
+  }
+  .options button {
+    display: block;
+    background: #e9ecef;
+    border: none;
+    border-radius: 6px;
+    padding: 10px 15px;
+    margin-bottom: 10px;
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background 0.3s;
+  }
+  .options button:hover {
+    background: #d1d8e0;
+  }
+  .options button.correct {
+    background: #a5d6a7 !important;
+    color: #2e7d32;
+    font-weight: bold;
+    cursor: default;
+  }
+  .options button.wrong {
+    background: #ef9a9a !important;
+    color: #c62828;
+    cursor: default;
+  }
+  .explanation {
+    margin-top: 15px;
+    padding-left: 15px;
+    border-left: 4px solid #4caf50;
+    font-style: italic;
+    color: #333;
+  }
+</style>
+</head>
+<body>
+
+<h1>Biology MCQs Interactive</h1>
+<input type="text" id="search" placeholder="Search questions..." />
+
+<div id="mcq-container">
+
+  <!-- MCQ Template -->
+  <div class="mcq" data-question="powerhouse cell">
+    <div class="question">Q1: What is the powerhouse of the cell?</div>
+    <div class="options">
+      <button data-correct="false">A) Nucleus</button>
+      <button data-correct="true">B) Mitochondria</button>
+      <button data-correct="false">C) Ribosome</button>
+      <button data-correct="false">D) Golgi apparatus</button>
+    </div>
+    <div class="explanation" style="display:none;">Explanation: Mitochondria produce energy through cellular respiration.</div>
+  </div>
+
+  <div class="mcq" data-question="dna genetic information">
+    <div class="question">Q2: Which macromolecule stores genetic information?</div>
+    <div class="options">
+      <button data-correct="false">A) Protein</button>
+      <button data-correct="false">B) Carbohydrate</button>
+      <button data-correct="true">C) DNA</button>
+      <button data-correct="false">D) Lipid</button>
+    </div>
+    <div class="explanation" style="display:none;">Explanation: DNA stores genetic information in cells.</div>
+  </div>
+
+  <div class="mcq" data-question="photosynthesis plant food">
+    <div class="question">Q3: What process do plants use to make food?</div>
+    <div class="options">
+      <button data-correct="false">A) Respiration</button>
+      <button data-correct="true">B) Photosynthesis</button>
+      <button data-correct="false">C) Transpiration</button>
+      <button data-correct="false">D) Fermentation</button>
+    </div>
+    <div class="explanation" style="display:none;">Explanation: Photosynthesis converts sunlight into chemical energy.</div>
+  </div>
+
+  <div class="mcq" data-question="white blood cells infection immunity">
+    <div class="question">Q4: Which blood cells fight infections?</div>
+    <div class="options">
+      <button data-correct="false">A) Red blood cells</button>
+      <button data-correct="false">B) Platelets</button>
+      <button data-correct="true">C) White blood cells</button>
+      <button data-correct="false">D) Plasma</button>
+    </div>
+    <div class="explanation" style="display:none;">Explanation: White blood cells are key in immune defense.</div>
+  </div>
+
+  <div class="mcq" data-question="cell basic unit life">
+    <div class="question">Q5: What is the basic unit of life?</div>
+    <div class="options">
+      <button data-correct="false">A) Atom</button>
+      <button data-correct="true">B) Cell</button>
+      <button data-correct="false">C) Molecule</button>
+      <button data-correct="false">D) Tissue</button>
+    </div>
+    <div class="explanation" style="display:none;">Explanation: The cell is the smallest unit that can carry out life functions.</div>
+  </div>
+
+</div>
+
+<script>
+  // Handle answer selection
+  document.querySelectorAll('.options button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const mcq = btn.closest('.mcq');
+      if (mcq.classList.contains('answered')) return; // no re-answering
+
+      mcq.classList.add('answered');
+
+      const buttons = mcq.querySelectorAll('.options button');
+      buttons.forEach(b => {
+        b.disabled = true;
+        if (b === btn) {
+          if (b.dataset.correct === 'true') {
+            b.classList.add('correct');
+          } else {
+            b.classList.add('wrong');
+          }
+        } else if (b.dataset.correct === 'true') {
+          b.classList.add('correct');
+        }
+      });
+
+      // Show explanation
+      mcq.querySelector('.explanation').style.display = 'block';
+    });
+  });
+
+  // Search filter
+  const searchInput = document.getElementById('search');
+  searchInput.addEventListener('input', () => {
+    const query = searchInput.value.toLowerCase().trim();
+    document.querySelectorAll('.mcq').forEach(mcq => {
+      const text = mcq.dataset.question.toLowerCase();
+      mcq.style.display = text.includes(query) ? '' : 'none';
+    });
+  });
+</script>
+
+</body>
+    </html>
