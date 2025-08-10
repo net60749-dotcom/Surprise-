@@ -1,0 +1,92 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Surprise 💖</title>
+<style>
+    body {
+        margin: 0;
+        height: 100vh;
+        background: linear-gradient(-45deg, #ff9a9e, #fad0c4, #fad0c4, #fbc2eb, #a1c4fd);
+        background-size: 400% 400%;
+        animation: gradient 15s ease infinite;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    @keyframes gradient {
+        0% {background-position: 0% 50%;}
+        50% {background-position: 100% 50%;}
+        100% {background-position: 0% 50%;}
+    }
+
+    h1 {
+        font-size: 2.5em;
+        color: white;
+        text-align: center;
+        animation: fadeIn 2s ease forwards;
+        opacity: 0;
+    }
+
+    @keyframes fadeIn {
+        to {opacity: 1;}
+    }
+
+    .heart {
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        background: red;
+        transform: rotate(45deg);
+        animation: floatUp 5s infinite ease-in;
+    }
+
+    .heart::before,
+    .heart::after {
+        content: "";
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        background: red;
+        border-radius: 50%;
+    }
+
+    .heart::before {
+        top: -10px;
+        left: 0;
+    }
+    .heart::after {
+        left: -10px;
+        top: 0;
+    }
+
+    @keyframes floatUp {
+        0% {transform: translateY(0) rotate(45deg); opacity: 1;}
+        100% {transform: translateY(-600px) rotate(45deg); opacity: 0;}
+    }
+</style>
+</head>
+<body>
+
+<h1>💖 You’re truly special 💖</h1>
+
+<script>
+function createHeart() {
+    const heart = document.createElement("div");
+    heart.className = "heart";
+    heart.style.left = Math.random() * 100 + "vw";
+    heart.style.animationDuration = (Math.random() * 2 + 3) + "s";
+    document.body.appendChild(heart);
+    setTimeout(() => { heart.remove(); }, 5000);
+}
+setInterval(createHeart, 300);
+</script>
+
+</body>
+  </html>
+	Add surprise page
