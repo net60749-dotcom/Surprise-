@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Journey Through the Land of the Dead - Coco Theme Game</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap');
+  body {
+    margin: 0; overflow: hidden;
+    background: linear-gradient(180deg, #1c0b30 0%, #ff8c00 100%);
+    font-family: 'Montserrat', sans-serif;
+    user-select: none;
+  }
+  canvas {
+    display: block;
+    margin: 0 auto;
+    background: #230041;
+    border: 5px solid #ffb800;
+    border-radius: 15px;
+  }
+  #score {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    color: #ffd500;
+    font-size: 24px;
+    font-weight: 700;
+    text-shadow: 1px 1px 6px #000;
+    z-index: 100;
+  }
+  #gameover {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #ffb800;
+    font-size: 36px;
+    font-weight: 900;
+    text-align: center;
+    background: rgba(0,0,0,0.8);
+    padding: 30px;
+    border-radius: 20px;
+    display: none;
+    z-index: 200;
+    box-shadow: 0 0 15px 5px #ffb800;
+  }
+  #gameover button {
+    margin-top: 20px;
+    background: #ffb800;
+    border: none;
+    padding: 12px 30px;
+    font-weight: 700;
+    font-size: 20px;
+    color: #230041;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  #gameover button:hover {
+    background: #ffd500;
+  }
+</style>
+</head>
+<body>
+
+<div id="score">Score: 0</div>
+<div id="gameover">
+  <div>Game Over!</div>
+  <button id="restartBtn">Restart</button>
+</div>
+
+<canvas id="gameCanvas" width="800" height="450"></canvas>
+
+<script>
+(() => {
+  const canvas = document.getElementById('gameCanvas');
+  const ctx = canvas.getContext('2d');
+
+  const scoreDisplay = document.getElementById('score');
+  const gameOverScreen = document.getElementById('gameover');
+  const restartBtn = document.getElementById('restartBtn');
+
+  const GRAVITY = 0.5;
+  const FLOOR_Y = canvas.height - 70;
+
+  const playerWidth = 50;
+  const playerHeight = 70;
+  const marigoldRadius = 15;
+  const enemyWidth = 50;
+  const enemyHeight = 70;
+
+  let keys = {};
+  let score = 0;
+  let gameRunning = true;
+
+  // Sounds with autoplay safe handling
+  const loadSound = (src) => {
+    const audio = new Audio(src);
+    audio.volume = 0.5;
+    return audio;
+  };
+  const sounds = {
+    jump: loadSound('https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg'),
+    collect: loadSound('https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg'),
+    hit: loadSound('https://actions.google.com/sounds/v1/cartoon/metal_clang.ogg'),
+  };
+
+  class Player {
+    constructor() {
+      this.x = 100;
+      this.y = FLOOR_Y - playerHeight;
+      this.vx = 0;
+      this.vy = 0;
+      this.speed = 5;
+      this.jumpPower = 12;
+      this.isOnGround = true;
+      this.color = '#ffbb00';
+    }
+    draw() {
+      ctx.fillStyle = this.color;
+      ctx.fillRect(this.x, this.y, playerWidth, playerHeight);
+      // Head
+      ctx.fillStyle = '#ffdbac';
+      ctx.beginPath();
+      ctx.ellipse(this.x + playerWidth / 2, this.y - 20, 25, 30, 0, 0, Math.PI * 2);
+      ctx.fill();
+      // Eyes
+      ctx.fillStyle = '#230041';
+      ctx.beginPath();
+      ctx.ellipse(this.x + playerWidth / 2 - 10, this.y - 25, 5, 8, 0, 0, Math.PI * 2);
+      ctx.ellipse(this.x + playerWidth / 2 + 10, this.y - 25, 5, 8, 0, 0, Math.PI * 2);
+      ctx.fill();
+      // Guitar on back
+      ctx.fillStyle = '#8b4513';
+      ctx.beginPath();
+      ctx.moveTo(this.x + playerWidth + 5, this.y + 20);
+      ctx.lineTo(this.x + playerWidth + 30, this.y + 10);
+      ctx.lineTo(this.x + playerWidth + 5, this.y + 50);
+      ctx.closePath();
+      ctx.fill();
+    }
+    update() {
+      this.vx = 0;
+      if (keys['ArrowRight']) this.vx = this.speed;
+      else if (keys['ArrowLeft']) this.vx = -this.speed;
+      this.x += this.vx;
+
+      if (this.x < 0) this.x = 0;
+      if (this.x + playerWidth > canvas.width) this.x = canvas.width - playerWidth;
+
+      this.vy += GRAVITY;
+      this.y += this.vy;
+
+      if (this.y + playerHeight >= FLOOR_Y) {
+        this.y = FLOOR_Y - playerHeight;
+        this.vy = 0;
+        this.isOnGround = true;
+      } else {
+        this.isOnGround = false;
+      }
+    }
+    jump() {
+      if (this.isOnGround) {
+        this.vy = -this.jumpPower;
+        this.isOnGround = false;
+        try { sounds.jump.play(); } catch { }
+      }
+    }
+  }
+
+  class Marigold {
+    constructor() {
+      this.x = Math.random() * (canvas.width - marigoldRadius * 2) + marigoldRadius;
+      this.y = Math.random() * (FLOOR_Y - 150) + 20;
+      this.radius = marigoldRadius;
+      this.collected = false;
+      this.pulse = 0;
+      this.pulseDir = 1;
+    }
+    draw() {
+      this.pulse += this.pulseDir * 0.05;
+      if (this.pulse > 1 || this.pulse < 0) this.pulseDir *= -1;
+      const size = this.radius + this.pulse * 5;
+
+      ctx.save();
+      ctx.translate(this.x, this.y);
+      ctx.fillStyle = '#ffb600';
+      for (let i = 0; i < 8; i++) {
+        ctx.beginPath();
+        ctx.ellipse(Math.cos(i * Math.PI / 4) * size, Math.sin(i * Math.PI / 4) * size / 2, size / 3, size / 1.8, 0, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.beginPath();
+      ctx.fillStyle = '#ff6f00';
+      ctx.ellipse(0, 0, size / 2, size / 2, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
+  }
+
+  class Enemy {
+    constructor() {
+      this.x = Math.random() * (canvas.width - enemyWidth);
+      this.y = FLOOR_Y - enemyHeight;
+      this.vx = (Math.random() < 0.5 ? -1 : 1) * (2 + Math.random() * 2);
+      this.color = '#9b59b6';
+      this.width = enemyWidth;
+      this.height = enemyHeight;
+    }
+    draw() {
+      ctx.fillStyle = this.color;
+      ctx.beginPath();
+      ctx.moveTo(this.x, this.y + this.height);
+      ctx.lineTo(this.x, this.y + this.height / 3);
+      ctx.quadraticCurveTo(this.x + this.width / 2, this.y - this.height / 2, this.x + this.width, this.y + this.height / 3);
+      ctx.lineTo(this.x + this.width, this.y + this.height);
+      ctx.closePath();
+      ctx.fill();
+
+      ctx.fillStyle = 'white';
+      ctx.beginPath();
+      ctx.ellipse(this.x + this.width / 3, this.y + this.height / 2.5, 8, 12, 0, 0, Math.PI * 2);
+      ctx.ellipse(this.x + this.width * 2 / 3, this.y + this.height / 2.5, 8, 12, 0, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = 'black';
+      ctx.beginPath();
+      ctx.ellipse(this.x + this.width / 3, this.y + this.height / 2.5, 4, 6, 0, 0, Math.PI * 2);
+      ctx.ellipse(this.x + this.width * 2 / 3, this.y + this.height / 2.5, 4, 6, 0, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    update() {
+      this.x += this.vx;
+      if (this.x < 0 || this.x + this.width > canvas.width) this.vx *= -1;
+    }
+  }
+
+  let player, marigolds, enemies;
+
+  function init() {
+    player = new Player();
+    marigolds = [];
+    enemies = [];
+    score = 0;
+    gameRunning = true;
+    gameOverScreen.style.display = 'none';
+    updateScore();
+
+    for (let i = 0; i < 6; i++) marigolds.push(new Marigold());
+    for (let i = 0; i < 3; i++) enemies.push(new Enemy());
+  }
+
+  function updateScore() {
+    scoreDisplay.textContent = `Score: ${score}`;
+  }
+
+  function rectsCollide(r1, r2) {
+    return (
+      r1.x < r2.x + r2.width &&
+      r1.x + r1.width > r2.x &&
+      r1.y < r2.y + r2.height &&
+      r1.y + r1.height > r2.y
+    );
+  }
+
+  function circleRectCollision(circle, rect) {
+    const distX = Math.abs(circle.x - rect.x - rect.width / 2);
+    const distY = Math.abs(circle.y - rect.y - rect.height / 2);
+
+    if (distX > rect.width / 2 + circle.radius) return false;
+    if (distY > rect.height / 2 + circle.radius) return false;
+
+    if (distX <= rect.width / 2) return true;
+    if (distY <= rect.height / 2) return true;
+
+    const dx = distX - rect.width / 2;
+    const dy = distY - rect.height / 2;
+    return dx * dx + dy * dy <= circle.radius * circle.radius;
+  }
+
+  function gameOver() {
+    gameRunning = false;
+    gameOverScreen.style.display = 'block';
+  }
+
+  window.addEventListener('keydown', e => {
+    keys[e.key] = true;
+    if ((e.key === ' ' || e.key === 'ArrowUp') && gameRunning) {
+      player.jump();
+    }
+  });
+  window.addEventListener('keyup', e => {
+    keys[e.key] = false;
+  });
+
+  function gameLoop() {
+    if (!gameRunning) return;
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Draw floor
+    ctx.fillStyle = '#663300';
+    ctx.fillRect(0, FLOOR_Y, canvas.width, canvas.height - FLOOR_Y);
+
+    // Draw and collect marigolds
+    for (const m of marigolds) {
+      if (!m.collected) {
+        m.draw();
+        if (circleRectCollision(m, player)) {
+          m.collected = true;
+          score++;
+          try { sounds.collect.play(); } catch {}
+          updateScore();
+        }
+      }
+    }
+
+    // Update and draw enemies, check collision
+    for (const enemy of enemies) {
+      enemy.update();
+      enemy.draw();
+      if (rectsCollide(player, enemy)) {
+        try { sounds.hit.play(); } catch {}
+        gameOver();
+      }
+    }
+
+    player.update();
+    player.draw();
+
+    requestAnimationFrame(gameLoop);
+  }
+
+  restartBtn.addEventListener('click', () => {
+    init();
+    gameLoop();
+  });
+
+  init();
+  gameLoop();
+})();
+</script>
+
+</body>
+  </html>
