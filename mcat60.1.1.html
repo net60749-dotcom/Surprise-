@@ -311,4 +311,52 @@
   <div class="options">
     <button data-correct="false">A) Oxygen</button>
     <button data-correct="true">B) Chlorine</button>
-    <button data-correct="false">C) Nitrogen
+    <button data-correct="false">C) Nitrogen 
+      <script>
+  document.querySelectorAll('.mcq').forEach(mcq => {
+    const buttons = mcq.querySelectorAll('.options button');
+    const explanation = mcq.querySelector('.explanation');
+
+    buttons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        // Disable all buttons once an option is clicked
+        buttons.forEach(b => b.disabled = true);
+
+        // Mark correct and wrong answers
+        buttons.forEach(b => {
+          if (b.dataset.correct === "true") {
+            b.classList.add('correct');
+          } else {
+            b.classList.add('wrong');
+          }
+        });
+
+        // Highlight the clicked button appropriately
+        if (btn.dataset.correct === "true") {
+          btn.classList.add('correct');
+        } else {
+          btn.classList.add('wrong');
+        }
+
+        // Show explanation
+        if (explanation) {
+          explanation.style.display = 'block';
+        }
+      });
+    });
+  });
+
+  // Search filter functionality
+  const searchInput = document.getElementById('search');
+  searchInput.addEventListener('input', () => {
+    const filter = searchInput.value.toLowerCase();
+    document.querySelectorAll('.mcq').forEach(mcq => {
+      const questionText = mcq.getAttribute('data-question').toLowerCase();
+      if (questionText.includes(filter)) {
+        mcq.style.display = '';
+      } else {
+        mcq.style.display = 'none';
+      }
+    });
+  });
+                                         </script>
